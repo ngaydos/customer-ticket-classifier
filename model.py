@@ -38,6 +38,6 @@ class Transformer():
                 X += " " + df[txt_columns[i]]
             else:
                 X = df[txt_columns[i]]
-                boolcheck = True
+                bool_check = True
         return X
 
