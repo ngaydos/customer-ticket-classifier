@@ -1,6 +1,12 @@
 import numpy as np
 import pandas as pd
 from sklearn.pipeline import Pipeline
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.linear_model import SGDClassifier
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
 
 
 df = pd.read_csv('data/realcapstonedata.csv')
@@ -41,3 +47,29 @@ class Transformer():
                 bool_check = True
         return X
 
+class Modeler():
+
+    def __init__(self, model= GradientBoostingClassifier()):
+        self.model = Pipeline([
+            ('vect', CountVectorizer()),
+            ('tfidf', TfidfTransformer()),
+            ('clf', model)
+            ])
+    
+    def fit(self, X, y):
+        self.model.fit(X, y)
+
+    def predict_proba(self, X):
+        return self.model.predict_proba(X)
+
+    def predict_binary(self, X, threshold = .5):
+        binary_preds = []
+        for value in self.predict_proba(X):
+            if value[0] <= threshold:
+                binary_preds.append(True)
+            else:
+                binary_preds.append(False)
+        return binary_preds
+
+    def predict(self, X):
+        return self.model.predict(X)
