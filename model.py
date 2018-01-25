@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import string
 from sklearn.pipeline import Pipeline
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import RandomForestClassifier
@@ -8,6 +9,14 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 
+stopwords_ = "a,able,about,across,after,all,almost,also,am,among,an,and,any,\
+are,as,at,be,because,been,but,by,can,could,dear,did,do,does,either,\
+else,ever,every,for,from,get,got,had,has,have,he,her,hers,him,his,\
+how,however,i,if,in,into,is,it,its,just,least,let,like,likely,may,\
+me,might,most,must,my,neither,no,of,off,often,on,only,or,other,our,\
+own,rather,said,say,says,she,should,since,so,some,than,that,the,their,\
+them,then,there,these,they,this,tis,to,too,twas,us,wants,was,we,were,\
+what,when,where,which,while,who,whom,why,will,with,would,yet,you,your".split(',')
 
 df = pd.read_csv('data/realcapstonedata.csv')
 
@@ -16,7 +25,7 @@ class Transformer():
     def __init__(self):
         pass
 
-    def transform_train(self, df, txt_columns, target_column):
+    def transform_train(self, df, txt_columns, target_column, stopwords = set(stopwords_)):
         '''Takes a dataframe of the training data and returns 
         a cleaned dataset model training or testing
         input = pandas_df including porting y-value, list of strings, string
@@ -32,10 +41,20 @@ class Transformer():
                 X = no_nas[txt_columns[i]].copy().str.lower()
                 bool_check = True
         X = X.fillna('empty')
+        X_final = pd.Series()
+        for text in X:
+            text_clean = text
+            for char in set(string.punctuation):
+                text_clean = text_clean.replace(char, '')
+            word_list = text_clean.split()
+            for word in text_clean.split():
+                if word in stopwords:
+                    word_list.remove(word)
+            X_final = X_final.append(pd.Series(" ".join(word_list)), ignore_index = True)
         y = no_nas[target_column]
-        return X, y
+        return X_final, y
 
-    def transform_test(self, df, txt_columns):
+    def transform_test(self, df, txt_columns, stopwords = set(stopwords_)):
         '''Takes in a dataframe of actual data and returns the a transformed dataframe
         for running in the model. '''
         bool_check = False
@@ -46,7 +65,17 @@ class Transformer():
                 X = df[txt_columns[i]].copy().str.lower()
                 bool_check = True
         X = X.fillna('empty')
-        return X
+        X_final = pd.Series()
+        for text in X:
+            text_clean = text
+            for char in set(string.punctuation):
+                text_clean = text_clean.replace(char, '')
+            word_list = text_clean.split()
+            for word in text_clean.split():
+                if word in stopwords:
+                    word_list.remove(word)
+            X_final = X_final.append(pd.Series(" ".join(word_list)), ignore_index = True)
+        return X_final
 
 class Modeler():
 
