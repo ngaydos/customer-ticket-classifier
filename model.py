@@ -9,6 +9,7 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 
+#taken from common words @ http://www.textfixer.com/resources/common-english-words.txt
 stopwords_ = "a,able,about,across,after,all,almost,also,am,among,an,and,any,\
 are,as,at,be,because,been,but,by,can,could,dear,did,do,does,either,\
 else,ever,every,for,from,get,got,had,has,have,he,her,hers,him,his,\
