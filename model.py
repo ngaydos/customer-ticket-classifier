@@ -27,9 +27,9 @@ class Transformer():
         no_nas = df[df[target_column].notna()]
         for i in range(len(txt_columns)):
             if bool_check:
-                X += ' ' + no_nas[txt_columns[i]]
+                X += ' ' + no_nas[txt_columns[i]].str.lower()
             else:
-                X = no_nas[txt_columns[i]].copy()
+                X = no_nas[txt_columns[i]].copy().str.lower()
                 bool_check = True
         X = X.fillna('empty')
         y = no_nas[target_column]
@@ -41,10 +41,11 @@ class Transformer():
         bool_check = False
         for i in range(len(txt_columns)):
             if bool_check:
-                X += " " + df[txt_columns[i]]
+                X += " " + df[txt_columns[i]].str.lower()
             else:
-                X = df[txt_columns[i]]
+                X = df[txt_columns[i]].copy().str.lower()
                 bool_check = True
+        X = X.fillna('empty')
         return X
 
 class Modeler():
