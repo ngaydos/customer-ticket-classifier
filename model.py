@@ -87,13 +87,40 @@ class Transformer():
             X_final = X_final.append(pd.Series(stemmer.stem(" ".join(word_list))), ignore_index = True)
         return X_final
 
-class Modeler():
+class BoostModeler():
 
-    def __init__(self, model= GradientBoostingClassifier()):
+    def __init__(self):
         self.model = Pipeline([
             ('vect', CountVectorizer()),
             ('tfidf', TfidfTransformer()),
-            ('clf', model)
+            ('clf', GradientBoostingClassifier())
+            ])
+    
+    def fit(self, X, y):
+        self.model.fit(X, y)
+
+    def predict_proba(self, X):
+        return self.model.predict_proba(X)
+
+    def predict_binary(self, X, threshold = .5):
+        binary_preds = []
+        for value in self.predict_proba(X):
+            if value[0] <= threshold:
+                binary_preds.append(True)
+            else:
+                binary_preds.append(False)
+        return binary_preds
+
+    def predict(self, X):
+        return self.model.predict(X)
+
+class BayesModeler():
+
+    def __init__(self):
+        self.model = Pipeline([
+            ('vect', CountVectorizer()),
+            ('tfidf', TfidfTransformer()),
+            ('clf', MultinomialNB())
             ])
     
     def fit(self, X, y):
