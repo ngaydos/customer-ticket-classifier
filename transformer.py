@@ -19,8 +19,6 @@ own,rather,said,say,says,she,should,since,so,some,than,that,the,their,\
 them,then,there,these,they,this,tis,to,too,twas,us,wants,was,we,were,\
 what,when,where,which,while,who,whom,why,will,with,would,yet,you,your".split(',')
 
-df = pd.read_csv('data/realcapstonedata.csv')
-
 class Transformer():
 
     def __init__(self):
