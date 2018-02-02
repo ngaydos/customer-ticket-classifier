@@ -19,7 +19,6 @@ own,rather,said,say,says,she,should,since,so,some,than,that,the,their,\
 them,then,there,these,they,this,tis,to,too,twas,us,wants,was,we,were,\
 what,when,where,which,while,who,whom,why,will,with,would,yet,you,your".split(',')
 
-df = pd.read_csv('data/realcapstonedata.csv')
 
 
 class BoostModeler():
@@ -28,7 +27,9 @@ class BoostModeler():
         self.model = Pipeline([
             ('vect', CountVectorizer()),
             ('tfidf', TfidfTransformer()),
-            ('clf', GradientBoostingClassifier())
+            ('clf', GradientBoostingClassifier(learning_rate = 0.05, 
+                max_depth = 5, max_features = 'sqrt', min_samples_leaf = 1,
+                min_samples_split = 10, n_estimators = 100, subsample = 0.5))
             ])
     
     def fit(self, X, y):
@@ -48,6 +49,9 @@ class BoostModeler():
 
     def predict(self, X):
         return self.model.predict(X)
+
+    def get_params(self):
+        return self.model.get_params()
 
 class BayesModeler():
 
