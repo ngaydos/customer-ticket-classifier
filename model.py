@@ -28,7 +28,7 @@ class BoostModeler():
             ('vect', CountVectorizer()),
             ('tfidf', TfidfTransformer()),
             ('clf', GradientBoostingClassifier(learning_rate = 0.05, 
-                max_depth = 5, max_features = 'sqrt', min_samples_leaf = 1,
+                max_depth = 5, min_samples_leaf = 1,
                 min_samples_split = 10, n_estimators = 100, subsample = 0.5))
             ])
     
