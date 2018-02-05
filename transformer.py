@@ -61,8 +61,7 @@ class Transformer():
 
     def transform_test(self, df, txt_columns, stopwords = set(stopwords_)):
         '''Takes in a dataframe of actual data and returns the a transformed dataframe
-        for running in the model. '''
-        stemmer = PorterStemmer()
+        for running in the model (Does not create a y value). '''
         bool_check = False
         for i in range(len(txt_columns)):
             if bool_check:
