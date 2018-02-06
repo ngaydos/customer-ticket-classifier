@@ -22,6 +22,10 @@ what,when,where,which,while,who,whom,why,will,with,would,yet,you,your".split(','
 
 
 class BoostModeler():
+    '''Creates the Gradient Boosted model generally used by
+    this project. Creates a pipeline that applies a count vectorizer,
+    term frequency, indirect document frequency transformer and then creates
+    a gradient boosted model (parameters grid searched)'''
 
     def __init__(self):
         self.model = Pipeline([
@@ -33,13 +37,27 @@ class BoostModeler():
             ])
     
     def fit(self, X, y):
+        '''Fits the model.
+        Inputs: X, a Series containing strings and y, a set of target values
+        Outputs: None 
+        '''
         self.model.fit(X, y)
 
     def predict_proba(self, X):
+        '''Runs predict_proba on fitted the model
+        Input: X, a pandas Series of strings
+        Output: a series of arrays of predicted probabilities
+        '''
         return self.model.predict_proba(X)
 
     def predict_binary(self, X, threshold = .5):
+        '''Makes predictions based on two classes, allows for
+        manual selection of threshold
+        Input: X, a pandas Series of strings and threshold, float
+        Output: Hard classifier predictions
+        '''
         binary_preds = []
+        #runs predict probas and then compares to threshold
         for value in self.predict_proba(X):
             if value[0] <= threshold:
                 binary_preds.append(True)
@@ -48,12 +66,20 @@ class BoostModeler():
         return binary_preds
 
     def predict(self, X):
+        '''Runs predict on fitted the model
+        Input: X, a pandas Series of strings
+        Output: a series of hard classifier predictions
+        '''
         return self.model.predict(X)
 
     def get_params(self):
         return self.model.get_params()
 
 class BayesModeler():
+    '''Creates the Naive Bayes model used to maximize precision.
+    Creates a pipeline that applies a count vectorizer, term frequency, 
+    indirect document frequency transformer and then creates
+    a naive bayes model'''
 
     def __init__(self):
         self.model = Pipeline([
@@ -64,12 +90,26 @@ class BayesModeler():
     
     def fit(self, X, y):
         self.model.fit(X, y)
+        '''Fits the model.
+        Inputs: X, a Series containing strings and y, a set of target values
+        Outputs: None 
+        '''
 
     def predict_proba(self, X):
+        '''Runs predict_proba on fitted the model
+        Input: X, a pandas Series of strings
+        Output: a series of arrays of predicted probabilities
+        '''
         return self.model.predict_proba(X)
 
     def predict_binary(self, X, threshold = .5):
+        '''Makes predictions based on two classes, allows for
+        manual selection of threshold
+        Input: X, a pandas Series of strings and threshold, float
+        Output: Hard classifier predictions
+        '''
         binary_preds = []
+        #runs predict probas and then compares to threshold
         for value in self.predict_proba(X):
             if value[0] <= threshold:
                 binary_preds.append(True)
@@ -78,4 +118,8 @@ class BayesModeler():
         return binary_preds
 
     def predict(self, X):
+        '''Runs predict on fitted the model
+        Input: X, a pandas Series of strings
+        Output: a series of hard classifier predictions
+        '''
         return self.model.predict(X)
