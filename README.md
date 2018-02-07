@@ -29,3 +29,7 @@ The text data was put through a Count Vectorizer, and then converted into a term
 The Gradient Boosted Model performed at an accuracy of approximately 95% on a testing data set. Simply selecting the most common class for every value resulted in an accuracy of 87% so there is significant improvement on the current process. The ROC AUC score for the model on the test set was .97. The Naive Bayes model had a significantly lower accuracy (89%) but had a precision score of .9.
 
 ![image roc_auc curve](roc_auc.png)
+
+## Deployment
+
+This model is support team agnostic and due to the modular nature of the code in both transformer.py and model.py can be applied to any company with a multi-team or escalation system.
